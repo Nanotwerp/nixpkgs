@@ -1,5 +1,18 @@
+diff --git a/bindings/python/CMakeLists.txt b/bindings/python/CMakeLists.txt
+index c631faf52ac3..1d92d069960b 100644
+--- a/bindings/python/CMakeLists.txt
++++ b/bindings/python/CMakeLists.txt
+@@ -161,7 +161,7 @@ function(finish_swig_python swig_target lldb_python_bindings_dir lldb_python_tar
+   if(LLDB_BUILD_FRAMEWORK)
+     set(LLDB_PYTHON_INSTALL_PATH ${LLDB_FRAMEWORK_INSTALL_DIR}/LLDB.framework/Versions/${LLDB_FRAMEWORK_VERSION}/Resources/Python)
+   else()
+-    set(LLDB_PYTHON_INSTALL_PATH ${LLDB_PYTHON_RELATIVE_PATH})
++    set(LLDB_PYTHON_INSTALL_PATH ${CMAKE_INSTALL_LIBDIR}/../${LLDB_PYTHON_RELATIVE_PATH})
+   endif()
+   if (NOT CMAKE_CFG_INTDIR STREQUAL  ".")
+     string(REPLACE ${CMAKE_CFG_INTDIR} "\$\{CMAKE_INSTALL_CONFIG_NAME\}" LLDB_PYTHON_INSTALL_PATH ${LLDB_PYTHON_INSTALL_PATH})
 diff --git a/cmake/modules/AddLLDB.cmake b/cmake/modules/AddLLDB.cmake
-index 3291a7c808e1..b27d27ce6a87 100644
+index a5be4afb40fb..41e25922f104 100644
 --- a/cmake/modules/AddLLDB.cmake
 +++ b/cmake/modules/AddLLDB.cmake
 @@ -109,7 +109,7 @@ function(add_lldb_library name)
