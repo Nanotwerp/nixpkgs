@@ -161,7 +161,11 @@ stdenv.mkDerivation (rec {
   '';
 
   # TODO: Hack to make dynamic linking work again. Find a better way to do this using the build-system machinery
-  postFixup = if (stdenv.isLinux && lib.versionAtLeast release_version "16") then "patchelf --add-rpath ${libclang.lib}/lib $out/bin/.lldb-wrapped" else null;
+  postFixup = if (stdenv.isLinux && lib.versionAtLeast release_version "16") then ''
+    for f in $out/bin/.lldb-wrapped $out/bin/lldb-*; do
+      patchelf --add-rpath ${libclang.lib}/lib $f
+    done
+  '' else null;
 
   meta = llvm_meta // {
     homepage = "https://lldb.llvm.org/";
