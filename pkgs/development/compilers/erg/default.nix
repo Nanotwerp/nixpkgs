@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "erg";
-  version = "0.6.28";
+  version = "0.6.35";
 
   src = fetchFromGitHub {
     owner = "erg-lang";
     repo = "erg";
     rev = "v${version}";
-    hash = "sha256-TK7Ak6ZKjEBcwimV0W/CgD3yd9q1aSgSkp9MuGE3d8k=";
+    hash = "sha256-aDYT2bXd2OcRRgYd6ycjeLPQ1LuRxejivhEFkiqZoGw=";
   };
 
-  cargoHash = "sha256-DD6RXGdkQHMKZCJhHRTbTrRQ15MdOZHbREJ31LePHUY=";
+  cargoHash = "sha256-I5g+Nqdr/UYS/+F9sGelOSnb2vnT5vHc0/VeRASBsQY=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -57,6 +57,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "A statically typed language that can deeply improve the Python ecosystem";
+    mainProgram = "erg";
     homepage = "https://github.com/erg-lang/erg";
     changelog = "https://github.com/erg-lang/erg/releases/tag/${src.rev}";
     license = with licenses; [ asl20 mit ];

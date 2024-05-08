@@ -17,13 +17,13 @@
 }:
 
 let
-  version = "0.18.2";
+  version = "0.18.3";
 
   src = fetchFromGitHub {
     owner = "jasp-stats";
     repo = "jasp-desktop";
     rev = "v${version}";
-    hash = "sha256-W0wYvk5T9srE1cOyGgahfGxEookdOgVcnzqH9SkFyo8=";
+    hash = "sha256-eKBxCIamNhUig+0vUEqXYbPjiaOsZk6QnOw8cnpjKFY=";
     fetchSubmodules = true;
   };
 
@@ -110,7 +110,7 @@ stdenv.mkDerivation {
     changelog = "https://jasp-stats.org/release-notes";
     description = "A complete statistical package for both Bayesian and Frequentist statistical methods";
     homepage = "https://github.com/jasp-stats/jasp-desktop";
-    license = lib.licenses.agpl3;
+    license = lib.licenses.agpl3Plus;
     mainProgram = "JASP";
     maintainers = with lib.maintainers; [ tomasajt ];
     # JASP's cmake build steps are really different on Darwin

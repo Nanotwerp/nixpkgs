@@ -13,21 +13,23 @@
 , withRpm ? !stdenv.isDarwin
 , rpm
 , db
+, withConda ? true
 }:
 
 stdenv.mkDerivation rec {
-  version = "0.7.27";
+  version = "0.7.28";
   pname = "libsolv";
 
   src = fetchFromGitHub {
     owner = "openSUSE";
     repo = "libsolv";
     rev = version;
-    sha256 = "sha256-kVExzCHfPU/o+C5TTAv1J9H7GmYwVWCsIpVkkts42js=";
+    hash = "sha256-cL7SDwCzXM2qJQfiu/3nfAiFbcFNn1YXD23Sl3n9nzY=";
   };
 
   cmakeFlags = [
     "-DENABLE_COMPLEX_DEPS=true"
+    (lib.cmakeBool "ENABLE_CONDA" withConda)
     "-DENABLE_LZMA_COMPRESSION=true"
     "-DENABLE_BZIP2_COMPRESSION=true"
     "-DENABLE_ZSTD_COMPRESSION=true"

@@ -2,20 +2,21 @@
 
 buildGoModule rec {
   pname = "kubectl-explore";
-  version = "0.7.1";
+  version = "0.8.3";
 
   src = fetchFromGitHub {
     owner = "keisku";
     repo = "kubectl-explore";
     rev = "v${version}";
-    hash = "sha256-4WxvVsA05Mta7AcrGe26B+Up+x/gwdlCnb/PN9Ehu18=";
+    hash = "sha256-OPZ0FQl++AxxZUMAdwg3+cr1KrwYNWs8n8UQ4oVrLBw=";
   };
 
-  vendorHash = "sha256-z/bPfY9UVqOnrA9jNUtM7jg53/URAMAJQAqH9D5KVPQ=";
+  vendorHash = "sha256-xNB+qC36DcD7oUWk242QcIKNfTmjuK5xbyJEztdhcJM=";
   doCheck = false;
 
   meta = with lib; {
     description = "A better kubectl explain with the fuzzy finder";
+    mainProgram = "kubectl-explore";
     homepage = "https://github.com/keisku/kubectl-explore";
     changelog = "https://github.com/keisku/kubectl-explore/releases/tag/v${version}";
     license = licenses.mit;

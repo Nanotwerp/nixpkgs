@@ -2,10 +2,10 @@
 
 let
   pname = "jitsi-videobridge2";
-  version = "2.3-64-g719465d1";
+  version = "2.3-105-ge155b81e";
   src = fetchurl {
     url = "https://download.jitsi.org/stable/${pname}_${version}-1_all.deb";
-    sha256 = "zZYBSHaMhGzJfONyEUkPUCalxLyB/EjqLqIgJPg2Z8o=";
+    sha256 = "jQTZwnj1oECjUTD8dC6PF5tJcPye8FYUJmYEEBhBuRs=";
   };
 in
 stdenv.mkDerivation {

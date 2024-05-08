@@ -1,14 +1,14 @@
-{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib }:
+{ stdenv, pkgsBuildBuild, fetchFromGitHub, lib, nix-update-script }:
 
 let
   generator = pkgsBuildBuild.buildGoModule rec {
     pname = "v2ray-domain-list-community";
-    version = "20240105034708";
+    version = "20240426060244";
     src = fetchFromGitHub {
       owner = "v2fly";
       repo = "domain-list-community";
       rev = version;
-      hash = "sha256-8taKbZUWttpTY56lzgWJeAPpt0q9srSwRkNqkOsmY2Y=";
+      hash = "sha256-DkZcqjYwXRNlRnfwbRZL6zlkYL9kig3cZ5H6LEzakeY=";
     };
     vendorHash = "sha256-azvMUi8eLNoNofRa2X4SKTTiMd6aOyO6H/rOiKjkpIY=";
     meta = with lib; {
@@ -23,7 +23,7 @@ stdenv.mkDerivation {
   inherit (generator) pname version src meta;
   buildPhase = ''
     runHook preBuild
-    ${generator}/bin/domain-list-community -datapath $src/data --exportlists=category-ads-all,tld-cn,cn,tld-\!cn,geolocation-\!cn,apple,icloud
+    ${generator}/bin/domain-list-community -datapath $src/data
     runHook postBuild
   '';
   installPhase = ''
@@ -31,5 +31,8 @@ stdenv.mkDerivation {
     install -Dm644 dlc.dat $out/share/v2ray/geosite.dat
     runHook postInstall
   '';
-  passthru.generator = generator;
+  passthru = {
+    inherit generator;
+    updateScript = nix-update-script { };
+  };
 }

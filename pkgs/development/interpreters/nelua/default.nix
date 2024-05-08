@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "nelua";
-  version = "unstable-2024-01-02";
+  version = "unstable-2024-04-20";
 
   src = fetchFromGitHub {
     owner = "edubart";
     repo = "nelua-lang";
-    rev = "4d4b2b187675522a3cf4584ef734a9f8df201159";
-    hash = "sha256-0ct4DG7ws16PrjmYfcAsr08zIO9cpb1Vtbm2OxcQcfY=";
+    rev = "9f75e009db190feda0f90ae858b48fd82f51b8b1";
+    hash = "sha256-JwuZZXYcH8KRPxt4PBwhYDjZlwqe6VfaONU8rdLIDs4=";
   };
 
   postPatch = ''
@@ -30,6 +30,6 @@ stdenv.mkDerivation rec {
     homepage = "https://nelua.io/";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = [ maintainers.marsam ];
+    maintainers = [ ];
   };
 }

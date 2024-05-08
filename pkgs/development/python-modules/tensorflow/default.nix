@@ -1,7 +1,7 @@
 { stdenv, bazel_5, buildBazelPackage, lib, fetchFromGitHub, symlinkJoin
 , addOpenGLRunpath, fetchpatch, fetchzip, linkFarm
 # Python deps
-, buildPythonPackage, pythonOlder, python
+, buildPythonPackage, pythonAtLeast, pythonOlder, python
 # Python libraries
 , numpy, tensorboard, abseil-cpp, absl-py
 , packaging, setuptools, wheel, keras-preprocessing, google-pasta
@@ -29,7 +29,7 @@
 , avx2Support  ? stdenv.hostPlatform.avx2Support
 , fmaSupport   ? stdenv.hostPlatform.fmaSupport
 # Darwin deps
-, Foundation, Security, cctools, llvmPackages_11
+, Foundation, Security, cctools, llvmPackages
 }:
 
 let
@@ -51,7 +51,7 @@ let
   # translation units, so the build fails at link time
   stdenv =
     if cudaSupport then cudaPackagesGoogle.backendStdenv
-    else if originalStdenv.isDarwin then llvmPackages_11.stdenv
+    else if originalStdenv.isDarwin then llvmPackages.stdenv
     else originalStdenv;
   inherit (cudaPackagesGoogle) cudatoolkit nccl;
   # use compatible cuDNN (https://www.tensorflow.org/install/source#gpu)
@@ -500,7 +500,7 @@ let
 
 in buildPythonPackage {
   inherit version pname;
-  disabled = pythonOlder "3.8";
+  disabled = pythonAtLeast "3.12";
 
   src = bazel-build.python;
 

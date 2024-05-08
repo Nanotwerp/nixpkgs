@@ -10,6 +10,7 @@
 , numpy
 , pandas
 , psutil
+, py3langid
 , python-dateutil
 , scipy
 , toml
@@ -24,7 +25,7 @@ let
 in
 buildPythonPackage rec {
   pname = "type-infer";
-  version = "0.0.17";
+  version = "0.0.19";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -33,7 +34,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "type_infer";
     inherit version;
-    hash = "sha256-2bPXJuGDXTVoYUP9IfwyRy8LbMT/ySoHDzuelrOq/DU=";
+    hash = "sha256-7fWRM776lAyOncp6WZDLH9ouVBhVvV23105xvhw8V24=";
   };
 
   nativeBuildInputs = [
@@ -48,6 +49,7 @@ buildPythonPackage rec {
     numpy
     pandas
     psutil
+    py3langid
     python-dateutil
     scipy
     toml

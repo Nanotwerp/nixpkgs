@@ -33,7 +33,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "ipxe";
-  version = "unstable-2023-07-19";
+  version = "1.21.1-unstable-2024-02-08";
 
   nativeBuildInputs = [ gnu-efi mtools openssl perl xorriso xz ] ++ lib.optional stdenv.hostPlatform.isx86 syslinux;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
@@ -43,8 +43,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ipxe";
     repo = "ipxe";
-    rev = "c1834f323f4f6b9b46cd5895b1457a117381363f";
-    hash = "sha256-fJeDgm+OaItshWFliq08Y0BPDD2FCkezeEp7trqWNjA=";
+    rev = "a846c4ccfc7db212dff792e081991df17268b4d5";
+    hash = "sha256-4BvAwZ09EZJXBkdkZHLw0qjOqasNaN6RF4wmTfPVTWc=";
   };
 
   postPatch = lib.optionalString stdenv.hostPlatform.isAarch64 ''
@@ -101,13 +101,14 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater {
+    tagPrefix = "v";
+  };
 
   meta = with lib;
     { description = "Network boot firmware";
       homepage = "https://ipxe.org/";
       license = licenses.gpl2Only;
-      maintainers = with maintainers; [ ehmry ];
       platforms = platforms.linux;
     };
 }

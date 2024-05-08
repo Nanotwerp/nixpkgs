@@ -2,7 +2,7 @@
 
 let
   themeName = "Dracula";
-  version = "unstable-2024-01-08";
+  version = "unstable-2024-04-24";
 in
 stdenvNoCC.mkDerivation {
   pname = "dracula-theme";
@@ -11,8 +11,8 @@ stdenvNoCC.mkDerivation {
   src = fetchFromGitHub {
     owner = "dracula";
     repo = "gtk";
-    rev = "f3c876d8c97f9bb504c98592a8d96770e70585bb";
-    hash = "sha256-jRq/rUVk/1+LoQaD5sytjai0yZOf+544z0TfxhMUThg=";
+    rev = "5e9a46b7610da0944a8131bbf08487861cae2c46";
+    hash = "sha256-pKKEZ/GheyIf6pPb+Sz4AfF8oRlf1Jk4cl0tub5Ye10=";
   };
 
   propagatedUserEnvPkgs = [
@@ -45,6 +45,6 @@ stdenvNoCC.mkDerivation {
     homepage = "https://github.com/dracula/gtk";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ alexarice msfjarvis ];
+    maintainers = with maintainers; [ alexarice ];
   };
 }

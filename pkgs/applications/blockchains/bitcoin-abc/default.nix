@@ -15,6 +15,7 @@
 , protobuf
 , qrencode
 , libevent
+, libnatpmp
 , sqlite
 , withGui
 , python3
@@ -24,13 +25,13 @@
 
 mkDerivation rec {
   pname = "bitcoin" + lib.optionalString (!withGui) "d" + "-abc";
-  version = "0.26.2";
+  version = "0.29.3";
 
   src = fetchFromGitHub {
     owner = "bitcoin-ABC";
     repo = "bitcoin-abc";
     rev = "v${version}";
-    sha256 = "0gz4713lk3alk3ykwq1bdqjywadrfrnb7n2878136g01n87j00az";
+    hash = "sha256-hYA0O7nDT8J1EnpW4i1+eBzkNw77JC6M7GwO3BdBh3U=";
   };
 
   nativeBuildInputs = [ pkg-config cmake ];
@@ -41,6 +42,7 @@ mkDerivation rec {
     zlib
     python3
     jemalloc
+    libnatpmp
     zeromq4
     miniupnpc
     util-linux

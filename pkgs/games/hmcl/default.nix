@@ -3,7 +3,7 @@
 , fetchurl
 , makeBinaryWrapper
 , makeDesktopItem
-, wrapGAppsHook
+, wrapGAppsHook3
 , copyDesktopItems
 , imagemagick
 , jre
@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     makeBinaryWrapper
-    wrapGAppsHook
+    wrapGAppsHook3
     copyDesktopItems
     imagemagick
   ];
@@ -89,6 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     homepage = "https://hmcl.huangyuhui.net";
     description = "A Minecraft Launcher which is multi-functional, cross-platform and popular";
+    mainProgram = "hmcl";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ ];

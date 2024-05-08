@@ -82,7 +82,9 @@ in rec {
         (onFullSupported "nixos.tests.gitlab")
         (onFullSupported "nixos.tests.gnome")
         (onFullSupported "nixos.tests.gnome-xorg")
-        (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
+        # FIXME: broken by QEMU 8.2.3 upgrade, reenable when fixed
+        # Upstream issue: https://gitlab.com/qemu-project/qemu/-/issues/2321
+        # (onSystems ["x86_64-linux"] "nixos.tests.hibernate")
         (onFullSupported "nixos.tests.i3wm")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSimple")
         (onSystems ["x86_64-linux"] "nixos.tests.installer.btrfsSubvolDefault")
@@ -142,7 +144,6 @@ in rec {
         (onFullSupported "nixos.tests.networking.networkd.virtual")
         (onFullSupported "nixos.tests.networking.networkd.vlan")
         (onFullSupported "nixos.tests.systemd-networkd-ipv6-prefix-delegation")
-        (onFullSupported "nixos.tests.nfs3.simple")
         (onFullSupported "nixos.tests.nfs4.simple")
         (onSystems ["x86_64-linux"] "nixos.tests.oci-containers.podman")
         (onFullSupported "nixos.tests.openssh")
@@ -169,12 +170,10 @@ in rec {
         (onFullSupported "nixpkgs.emacs")
         (onFullSupported "nixpkgs.jdk")
         (onSystems ["x86_64-linux"] "nixpkgs.mesa_i686") # i686 sanity check + useful
-        ["nixpkgs.tarball"]
-
-        # Ensure that nixpkgs-check-by-name is available in all release channels and nixos-unstable,
-        # so that a pre-built version can be used in CI for PR's on the corresponding development branches.
-        # See ../pkgs/test/nixpkgs-check-by-name/README.md
-        (onSystems ["x86_64-linux"] "nixpkgs.tests.nixpkgs-check-by-name")
+        [
+          "nixpkgs.tarball"
+          "nixpkgs.release-checks"
+        ]
       ];
     };
 }

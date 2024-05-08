@@ -15,22 +15,28 @@
 , pyyaml
 , requests
 , requests-oauthlib
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.7.1";
-  format = "setuptools";
+  version = "1.7.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-jUOdCFUEcFJEJd7e5LyKcnZsIWwhjzdyw3QE6y/Yblo=";
+    hash = "sha256-B38JMJzIpskGPb1hSzQ4B9Un1UZpO3/o/FpEM1Av6mw=";
   };
 
   nativeBuildInputs = [
     installShellFiles
+  ];
+
+  build-system = [
+    babel
+    setuptools
   ];
 
   propagatedBuildInputs = [
@@ -43,7 +49,6 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    babel
     gntp
     paho-mqtt
     pytest-mock
@@ -74,6 +79,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/caronc/apprise";
     changelog = "https://github.com/caronc/apprise/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ marsam ];
+    maintainers = with maintainers; [ ];
+    mainProgram = "apprise";
   };
 }

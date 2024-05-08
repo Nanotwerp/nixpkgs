@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "listenbrainz-mpd";
-  version = "2.3.2";
+  version = "2.3.5";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "elomatreb";
     repo = "listenbrainz-mpd";
     rev = "v${version}";
-    hash = "sha256-DqxE+wEHDmOmh+iJa312uAWQcg/1ApOTZNLrhGq5KmY=";
+    hash = "sha256-z3SVpPCWZqCVXPKbPxZAKGtk8Z/Tf5PULn0dWsKlVrE=";
   };
 
-  cargoHash = "sha256-/fd3XIBHwJ95bwirUbMldw2cAfdF2Sv8CPxrbM4WWBI=";
+  cargoHash = "sha256-eCdUrxt9edJm6K3f8V8bjgYWMq3mgj/ZfUZYWE3ZBqw=";
 
   nativeBuildInputs = [ pkg-config installShellFiles asciidoctor ];
 
@@ -59,5 +59,6 @@ rustPlatform.buildRustPackage rec {
     description = "ListenBrainz submission client for MPD";
     license = licenses.agpl3Only;
     maintainers = with maintainers; [ DeeUnderscore ];
+    mainProgram = "listenbrainz-mpd";
   };
 }

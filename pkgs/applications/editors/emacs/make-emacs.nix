@@ -58,7 +58,7 @@
 , tree-sitter
 , texinfo
 , webkitgtk
-, wrapGAppsHook
+, wrapGAppsHook3
 
 # Boolean flags
 , withNativeCompilation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -68,6 +68,7 @@
 , withAlsaLib ? false
 , withAthena ? false
 , withCsrc ? true
+, withDbus ? stdenv.isLinux
 , withGTK2 ? false
 , withGTK3 ? withPgtk && !noGui
 , withGconf ? false
@@ -77,6 +78,7 @@
 , withMotif ? false
 , withNS ? stdenv.isDarwin && !(variant == "macport" || noGui)
 , withPgtk ? false
+, withSelinux ? stdenv.isLinux
 , withSQLite3 ? lib.versionAtLeast version "29"
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
 , withToolkitScrollBars ? true
@@ -210,7 +212,7 @@ mkDerivation (finalAttrs: {
   ] ++ lib.optionals srcRepo [
     autoreconfHook
     texinfo
-  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook;
+  ] ++ lib.optional (withPgtk || withX && (withGTK3 || withXwidgets)) wrapGAppsHook3;
 
   buildInputs = [
     gettext
@@ -227,8 +229,9 @@ mkDerivation (finalAttrs: {
     alsa-lib
   ] ++ lib.optionals withGpm [
     gpm
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals withDbus [
     dbus
+  ] ++ lib.optionals withSelinux [
     libselinux
   ] ++ lib.optionals (!stdenv.isDarwin && withGTK3) [
     gsettings-desktop-schemas
@@ -338,6 +341,8 @@ mkDerivation (finalAttrs: {
     (lib.withFeature withTreeSitter "tree-sitter")
     (lib.withFeature withXinput2 "xinput2")
     (lib.withFeature withXwidgets "xwidgets")
+    (lib.withFeature withDbus "dbus")
+    (lib.withFeature withSelinux "selinux")
   ];
 
   env = lib.optionalAttrs withNativeCompilation {

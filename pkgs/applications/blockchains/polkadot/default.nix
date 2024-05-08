@@ -1,25 +1,29 @@
 { fetchFromGitHub
 , lib
+, openssl
+, pkg-config
 , protobuf
-, rocksdb
+, rocksdb_8_3
 , rust-jemalloc-sys-unprefixed
 , rustPlatform
-, rustc-wasm32
+, rustc
 , stdenv
 , Security
 , SystemConfiguration
 }:
+
+let
+  rocksdb = rocksdb_8_3;
+in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "1.5.0";
+  version = "1.11.0";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    # NOTE: temporary tag with fix for building with nix
-    # `-nix` suffix should be removed in the next release
-    rev = "polkadot-v${version}-nix";
-    hash = "sha256-pjny1aw9l2m9t8VyUB+EaQaPtYPypC6WqOwAco1kxNU=";
+    rev = "polkadot-v${version}";
+    hash = "sha256-q8u2L7CUDUPZrU/i8K5jsqG4Ib0Wh5e/LIUc6Z4SFfY=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -43,10 +47,10 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "ark-secret-scalar-0.0.2" = "sha256-ytwKeUkiXIcwJLo9wpWSIjL4LBZJDbeED5Yqxso9l74=";
-      "common-0.1.0" = "sha256-9vTJNKsL6gK8MM8dUKrShEvL9Ac9YQg1q8iVE9+deak=";
-      "fflonk-0.1.0" = "sha256-PC7eJEOo/RN9Gk27CcTIyGMA9XZeFAJkO2FK02JVzN0=";
-      "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
+      "ark-secret-scalar-0.0.2" = "sha256-91sODxaj0psMw0WqigMCGO5a7+NenAsRj5ZmW6C7lvc=";
+      "common-0.1.0" = "sha256-LHz2dK1p8GwyMimlR7AxHLz1tjTYolPwdjP7pxork1o=";
+      "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
+      "litep2p-0.3.0" = "sha256-IiJmmSb1+8+HbT/LP/zvhioVBeeGAncf4zo7Czuq6qY=";
       "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";
       "sp-crypto-ec-utils-0.4.1" = "sha256-/Sw1ZM/JcJBokFE4y2mv/P43ciTL5DEm0PDG0jZvMkI=";
     };
@@ -62,13 +66,15 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [
+    pkg-config
     rustPlatform.bindgenHook
-    rustc-wasm32
-    rustc-wasm32.llvmPackages.lld
+    rustc
+    rustc.llvmPackages.lld
   ];
 
   # NOTE: jemalloc is used by default on Linux with unprefixed enabled
-  buildInputs = lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
+  buildInputs = [ openssl ] ++
+    lib.optionals stdenv.isLinux [ rust-jemalloc-sys-unprefixed ] ++
     lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
@@ -77,6 +83,7 @@ rustPlatform.buildRustPackage rec {
 
   # NOTE: we need to force lld otherwise rust-lld is not found for wasm32 target
   CARGO_TARGET_WASM32_UNKNOWN_UNKNOWN_LINKER = "lld";
+  OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 

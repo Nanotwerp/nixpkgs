@@ -1,10 +1,9 @@
 { lib
-, buildGoModule
+, buildGo122Module
 , fetchFromGitHub
 , fetchNpmDeps
-, fetchpatch
 , cacert
-, go
+, go_1_22
 , git
 , enumer
 , mockgen
@@ -15,31 +14,27 @@
 , stdenv
 }:
 
+let
+  buildGoModule = buildGo122Module;
+  go = go_1_22;
+in
+
 buildGoModule rec {
   pname = "evcc";
-  version = "0.123.7";
+  version = "0.126.2";
 
   src = fetchFromGitHub {
     owner = "evcc-io";
     repo = "evcc";
     rev = version;
-    hash = "sha256-I8qcKrCuiUpDdsWDMiEZdo+PBkMELo5V6GW+nKFaD3Y=";
+    hash = "sha256-jeOlBHCPn+k+rXADm0hcGqg+7qn8FOJKnCfSwZazRl8=";
   };
 
-  patches = [
-    (fetchpatch {
-      # https://github.com/evcc-io/evcc/pull/11547
-      name = "evcc-mockgen.patch";
-      url = "https://github.com/evcc-io/evcc/commit/5ec02a9dba79a733f71fc02a9552eb01e4e08f0b.patch";
-      hash = "sha256-uxKdtwdhUcMFCMkG756OD9aSMP9rdOL4Tg0HBWwp3kw=";
-    })
-  ];
-
-  vendorHash = "sha256-FKF6+64mjrKgzFAb+O0QCURieOoRB//QNbpMFMcNG8s=";
+  vendorHash = "sha256-jJOxFkoVBT1NrnhntHPa2/irjHD09zKbtNDQoyelJp4=";
 
   npmDeps = fetchNpmDeps {
     inherit src;
-    hash = "sha256-a3AyqQ8GYP3g9KGbjtLHjHBrJGHg2sNjAQlMUa26pOY=";
+    hash = "sha256-KW2aVK3Ui5sGBcNhTsNXUr9HyHcm0iJxxzBUjrNWrqw=";
   };
 
   nativeBuildInputs = [
@@ -55,8 +50,6 @@ buildGoModule rec {
       cacert
       mockgen
     ];
-
-    inherit patches;
 
     preBuild = ''
       make assets
@@ -85,6 +78,7 @@ buildGoModule rec {
     # requires network access
     rm meter/template_test.go
     rm charger/template_test.go
+    rm tariff/template_test.go
   '';
 
   passthru = {

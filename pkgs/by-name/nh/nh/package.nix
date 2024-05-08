@@ -1,29 +1,27 @@
-{ lib
+{ stdenv
+, lib
 , rustPlatform
 , installShellFiles
 , makeBinaryWrapper
+, darwin
 , fetchFromGitHub
 , nix-update-script
 , nvd
-, use-nom ? true
-, nix-output-monitor ? null
+, nix-output-monitor
 }:
-
-assert use-nom -> nix-output-monitor != null;
-
 let
-  version = "3.5.1";
-  runtimeDeps = [ nvd ] ++ lib.optionals use-nom [ nix-output-monitor ];
+  version = "3.5.14";
+  runtimeDeps = [ nvd nix-output-monitor ];
 in
 rustPlatform.buildRustPackage {
   inherit version;
   pname = "nh";
 
   src = fetchFromGitHub {
-    owner = "ViperML";
+    owner = "viperML";
     repo = "nh";
     rev = "refs/tags/v${version}";
-    hash = "sha256-q13oPB1fl45E+7cbV1P1VQt1GtGBaSbrHPtC0Y7q83c=";
+    hash = "sha256-4vXLHDj6TnEXjJIzEcToHQ+6Rp4EnMpOFHQ3Ypymh0s=";
   };
 
   strictDeps = true;
@@ -32,6 +30,8 @@ rustPlatform.buildRustPackage {
     installShellFiles
     makeBinaryWrapper
   ];
+
+  buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   preFixup = ''
     mkdir completions
@@ -44,17 +44,16 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram $out/bin/nh \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps} \
-      ${lib.optionalString use-nom "--set-default NH_NOM 1"}
+      --prefix PATH : ${lib.makeBinPath runtimeDeps}
   '';
 
-  cargoHash = "sha256-Jy873l3ZRBqljzV/GwLbkk1kpO6zNqeGmuMDSKUqyzM=";
+  cargoHash = "sha256-A2AFlm6Qs7IuR6LedapWx4RL0Ae5E7eSBJSMXjrONHE=";
 
   passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Yet another nix cli helper";
-    homepage = "https://github.com/ViperML/nh";
+    homepage = "https://github.com/viperML/nh";
     license = lib.licenses.eupl12;
     mainProgram = "nh";
     maintainers = with lib.maintainers; [ drupol viperML ];

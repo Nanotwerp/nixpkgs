@@ -28,7 +28,6 @@ in appimageTools.wrapAppImage {
 
   extraInstallCommands = ''
     # Add desktop convencience stuff
-    mv $out/bin/{${pname}-*,${pname}}
     install -Dm444 ${appimageContents}/todoist.desktop -t $out/share/applications
     install -Dm444 ${appimageContents}/todoist.png -t $out/share/pixmaps
     substituteInPlace $out/share/applications/todoist.desktop \
@@ -41,5 +40,6 @@ in appimageTools.wrapAppImage {
     platforms = [ "x86_64-linux" ];
     license = licenses.unfree;
     maintainers = with maintainers; [ kylesferrazza pokon548 ];
+    mainProgram = "todoist-electron";
   };
 }

@@ -5,30 +5,26 @@
 , pkg-config
 , openssl
 , Security
+, SystemConfiguration
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "lychee";
-  version = "0.13.0";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "lycheeverse";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-JUyoOtlypDWK6HxsonVzbfQAdcXk728a8gVI/5GI2fs=";
+    hash = "sha256-luc6rzNYhS+c5B4S3/cOvDqnRF+LfRDY1aw99hkF+nE=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "criterion-0.4.0" = "sha256-0EKLRdxbH2czkZjmuaYLzkTBU687y6Iw9yqNV2TbsDw=";
-    };
-  };
+  cargoHash = "sha256-kGdRz5m0L3v3DBeabYq1Zp0bEEPW5C0y+A7tTjWkCwM=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
 
   checkFlags = [
     #  Network errors for all of these tests
@@ -51,5 +47,6 @@ rustPlatform.buildRustPackage rec {
     downloadPage = "https://github.com/lycheeverse/lychee/releases/tag/v${version}";
     license = with licenses; [ asl20 mit ];
     maintainers = with maintainers; [ totoroot tuxinaut ];
+    mainProgram = "lychee";
   };
 }

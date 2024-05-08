@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , callPackage
 , buildGoModule
 , installShellFiles
@@ -11,7 +12,10 @@
 , python3
 , ninja
 , perl
-, autoconf
+# autoconf-2.71 fails on problematic configure:
+#   checking curl version... 7.84.0
+#   ./configure: line 6713: syntax error near unexpected token `;;'
+, autoconf269
 , automake
 , libtool
 , darwin
@@ -25,20 +29,30 @@
 let
   makeCurlImpersonate = { name, target }: stdenv.mkDerivation rec {
     pname = "curl-impersonate-${name}";
-    version = "0.5.4";
+    version = "0.6.1";
 
     src = fetchFromGitHub {
       owner = "lwthiker";
       repo = "curl-impersonate";
       rev = "v${version}";
-      hash = "sha256-LBGWFal2szqgURIBCLB84kHWpdpt5quvBBZu6buGj2A=";
+      hash = "sha256-ExmEhjJC8FPzx08RuKOhRxKgJ4Dh+ElEl+OUHzRCzZc=";
     };
 
     patches = [
       # Fix shebangs in the NSS build script
       # (can't just patchShebangs since makefile unpacks it)
       ./curl-impersonate-0.5.2-fix-shebangs.patch
+
+      # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
+      (fetchpatch {
+        url = "https://github.com/lwthiker/curl-impersonate/commit/e7b90a0d9c61b6954aca27d346750240e8b6644e.patch";
+        hash = "sha256-jFrz4Q+MJGfNmwwzHhThado4c9hTd/+b/bfRsr3FW5k=";
+      })
     ];
+
+    # Disable blanket -Werror to fix build on `gcc-13` related to minor
+    # warnings on `boringssl`.
+    env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
     strictDeps = true;
 
@@ -52,7 +66,7 @@ let
       python3.pkgs.gyp
       ninja
       perl
-      autoconf
+      autoconf269
       automake
       libtool
       unzip
@@ -138,7 +152,7 @@ let
         inherit (passthru.deps."boringssl.zip") name;
 
         src = passthru.deps."boringssl.zip";
-        vendorHash = "sha256-ISmRdumckvSu7hBXrjvs5ZApShDiGLdD3T5B0fJ1x2Q=";
+        vendorHash = "sha256-SNUsBiKOGWmkRdTVABVrlbLAVMfu0Q9IgDe+kFC5vXs=";
 
         nativeBuildInputs = [ unzip ];
 
@@ -152,12 +166,6 @@ let
       license = with licenses; [ curl mit ];
       maintainers = with maintainers; [ deliciouslytyped lilyinstarlight ];
       platforms = platforms.unix;
-      knownVulnerabilities = [
-        "CVE-2023-38545"  # SOCKS5 heap buffer overflow - https://curl.se/docs/CVE-2023-38545.html
-        "CVE-2023-32001"  # fopen TOCTOU race condition - https://curl.se/docs/CVE-2023-32001.html
-        "CVE-2022-43551"  # HSTS bypass - https://curl.se/docs/CVE-2022-43551.html
-        "CVE-2022-42916"  # HSTS bypass - https://curl.se/docs/CVE-2022-42916.html
-      ];
     };
   };
 in

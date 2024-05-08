@@ -14,14 +14,14 @@
 
 buildPythonPackage rec {
   pname = "pixel-font-builder";
-  version = "0.0.10";
+  version = "0.0.19";
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     pname = "pixel_font_builder";
     inherit version;
-    hash = "sha256-evLsNRSC9sPZfhNc8tYbZ/bIrBxSbLuiGRD3ld7Jkbo=";
+    hash = "sha256-f38DyM5hojHfv8k/W6kcHxbOjz43hHW6i4Scm6NbHiQ=";
   };
 
   format = "pyproject";

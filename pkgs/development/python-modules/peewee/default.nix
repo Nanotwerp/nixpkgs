@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "peewee";
-  version = "3.17.0";
+  version = "3.17.3";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "coleifer";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-QbbwC55q/BjMGtm3fH8HPd0aETMzLAFwVYFvOS/4dqA=";
+    hash = "sha256-F0bv9J2etrVF8wMU3caQ1ZA6TmQQOPTZWFjGsKOEPwo=";
   };
 
   buildInputs = [
@@ -57,6 +57,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Python ORM with support for various database implementation";
+    mainProgram = "pwiz.py";
     homepage = "http://peewee-orm.com";
     license = licenses.mit;
     maintainers = with maintainers; [ ];

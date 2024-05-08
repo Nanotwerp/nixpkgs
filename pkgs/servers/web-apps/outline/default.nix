@@ -4,6 +4,7 @@
 , fetchYarnDeps
 , makeWrapper
 , prefetch-yarn-deps
+, fixup-yarn-lock
 , nodejs
 , yarn
 , nixosTests
@@ -11,21 +12,21 @@
 
 stdenv.mkDerivation rec {
   pname = "outline";
-  version = "0.73.1";
+  version = "0.76.0";
 
   src = fetchFromGitHub {
     owner = "outline";
     repo = "outline";
     rev = "v${version}";
-    hash = "sha256-t1m9pKsM9E2iAg9vv/nKmQioRi6kMjFGcTXzcT3cMxs=";
+    hash = "sha256-pTu1/7hEYvo/6MuN0yC+nrPCwUYqvcc2hZuiPtVFlwU=";
   };
 
-  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps ];
+  nativeBuildInputs = [ makeWrapper prefetch-yarn-deps fixup-yarn-lock ];
   buildInputs = [ yarn nodejs ];
 
   yarnOfflineCache = fetchYarnDeps {
     yarnLock = "${src}/yarn.lock";
-    hash = "sha256-TRZlkDe7ARLGmfw5a0Dw9hSBRhqWvOfuBfPZ5/Bt/TI=";
+    hash = "sha256-10kqC4A9OFrpZzTBJIZ6I5TCOVgpX+h+hwfOWhXdhHs=";
   };
 
   configurePhase = ''

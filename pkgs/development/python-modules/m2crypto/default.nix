@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.40.1";
+  version = "0.41.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "M2Crypto";
     inherit version;
-    hash = "sha256-u/0RPsVXCMBYFiUqTwnkI33087v8gXHLvDMFfSV7uzA=";
+    hash = "sha256-OhNYx+6EkEbZF4Knd/F4a/AnocHVG1+vjxlDW/w/FJU=";
   };
 
   nativeBuildInputs = [
@@ -32,10 +32,14 @@ buildPythonPackage rec {
     parameterized
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
-    "-Wno-error=implicit-function-declaration"
-    "-Wno-error=incompatible-pointer-types"
-  ]);
+  env = {
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin (toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=incompatible-pointer-types"
+    ]);
+  } // lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform) {
+    CPP = "${stdenv.cc.targetPrefix}cpp";
+  };
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -50,6 +54,6 @@ buildPythonPackage rec {
     homepage = "https://gitlab.com/m2crypto/m2crypto";
     changelog = "https://gitlab.com/m2crypto/m2crypto/-/blob/${version}/CHANGES";
     license = licenses.mit;
-    maintainers = with maintainers; [ andrew-d ];
+    maintainers = with maintainers; [ ];
   };
 }

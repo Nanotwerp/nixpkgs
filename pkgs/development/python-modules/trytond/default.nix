@@ -25,14 +25,14 @@
 
 buildPythonPackage rec {
   pname = "trytond";
-  version = "6.8.5";
+  version = "7.0.10";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-o/U8bmCAotgDYY81eX+vXOxJC3f4aQvOF6ohMOHLuLY=";
+    hash = "sha256-N/O27qQBD18lncW0hCfJkUlmCuej8HtV2x/MnRUDGcc=";
   };
 
   propagatedBuildInputs = [
@@ -80,7 +80,7 @@ buildPythonPackage rec {
       modularity, scalability and security.
     '';
     homepage = "http://www.tryton.org/";
-    changelog = "https://hg.tryton.org/trytond/file/${version}/CHANGELOG";
+    changelog = "https://foss.heptapod.net/tryton/tryton/-/blob/trytond-${version}/trytond/CHANGELOG?ref_type=tags";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ udono johbo ];
   };

@@ -1,7 +1,7 @@
 { lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, scdoc
-, systemd, pango, cairo, gdk-pixbuf, jq
+, systemd, pango, cairo, gdk-pixbuf, jq, bash
 , wayland, wayland-protocols
-, wrapGAppsHook }:
+, wrapGAppsHook3 }:
 
 stdenv.mkDerivation rec {
   pname = "mako";
@@ -15,7 +15,7 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook ];
+  nativeBuildInputs = [ meson ninja pkg-config scdoc wayland-protocols wrapGAppsHook3 ];
   buildInputs = [ systemd pango cairo gdk-pixbuf wayland ];
 
   mesonFlags = [
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ systemd /* for busctl */ jq ]}"
+      --prefix PATH : "${lib.makeBinPath [ systemd /* for busctl */ jq bash ]}"
     )
   '';
 

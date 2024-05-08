@@ -4,21 +4,26 @@
 , fetchFromGitHub
 , python
 , pythonOlder
+, setuptools
 }:
 
 buildPythonPackage rec {
   pname = "pyelftools";
-  version = "0.29";
-  format = "setuptools";
+  version = "0.31";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "eliben";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-tPY0C5CoA9hGHeEA/KWQ1RAVT5kqMlAwuWpOSH+KJ9Y=";
+    repo = "pyelftools";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-kX89fMXqrEvhMAAjqKHzHmrYizKBt1uCWMOJtFNNhy4=";
   };
+
+  build-system = [
+    setuptools
+  ];
 
   doCheck = stdenv.hostPlatform.system == "x86_64-linux" && stdenv.hostPlatform.isGnu;
 
@@ -39,5 +44,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/eliben/pyelftools/blob/v${version}/CHANGES";
     license = licenses.publicDomain;
     maintainers = with maintainers; [ igsha pamplemousse ];
+    mainProgram = "readelf.py";
   };
 }

@@ -1,25 +1,25 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "cnspec";
-  version = "9.14.0";
+  version = "11.3.0";
 
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnspec";
     rev = "refs/tags/v${version}";
-    hash = "sha256-9MIIxWfETi2DX1DYPALL+JoC4r3yKJpeSFIx+hrGKiM=";
+    hash = "sha256-Xq5kOyIKCfTkzyQQQf/krgcKi78JInAFT5oNgjOlINo=";
   };
 
   proxyVendor = true;
-  vendorHash = "sha256-Yii2sDfYqIzQAUaMotT87Wa5g3skxWllq6yGlkPDbLg=";
 
-  subPackages = [
-    "apps/cnspec"
-  ];
+  vendorHash = "sha256-a0TjKpoS2NwvYeJhb2YIxX5XI/HdKjYPnZkfTKII/DY=";
+
+  subPackages = [ "apps/cnspec" ];
 
   ldflags = [
     "-s"
@@ -32,6 +32,9 @@ buildGoModule rec {
     homepage = "https://github.com/mondoohq/cnspec";
     changelog = "https://github.com/mondoohq/cnspec/releases/tag/v${version}";
     license = licenses.bsl11;
-    maintainers = with maintainers; [ fab mariuskimmina ];
+    maintainers = with maintainers; [
+      fab
+      mariuskimmina
+    ];
   };
 }

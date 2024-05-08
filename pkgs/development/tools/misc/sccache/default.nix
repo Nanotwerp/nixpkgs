@@ -8,17 +8,17 @@
 }:
 
 rustPlatform.buildRustPackage rec {
-  version = "0.7.5";
+  version = "0.8.0";
   pname = "sccache";
 
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "sccache";
     rev = "v${version}";
-    sha256 = "sha256-rql5Nj/w7cNaO6UKK96vYYE2E19RIiCHYHTnbW+U4n8=";
+    sha256 = "sha256-GKJKesvOtnZsLcYQjSsnUcolBIqqiYSX0VSZru416mk=";
   };
 
-  cargoHash = "sha256-VdI39DgQrUZhoawMqBC6ngTvldW+QbDjMjxjjbH9G1A=";
+  cargoHash = "sha256-GacjuBLlVawNRFutsjfywYHo34QKJHCPgi/QCPjcaAA=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Ccache with Cloud Storage";
+    mainProgram = "sccache";
     homepage = "https://github.com/mozilla/sccache";
     changelog = "https://github.com/mozilla/sccache/releases/tag/v${version}";
     maintainers = with maintainers; [ doronbehar figsoda ];
