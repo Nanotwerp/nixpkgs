@@ -1,4 +1,12 @@
-{ lib, rustPlatform, fetchFromGitHub, installShellFiles, rust-jemalloc-sys, testers, fd }:
+{ lib
+, rustPlatform
+, fetchFromGitHub
+, installShellFiles
+, mold
+, rust-jemalloc-sys
+, testers
+, fd
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
@@ -13,7 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-3TbsPfAn/GcGASc0RCcyAeUiD4RUtvTATdTYhKdBxvo=";
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [ installShellFiles mold ];
 
   buildInputs = [ rust-jemalloc-sys ];
 
