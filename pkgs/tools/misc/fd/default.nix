@@ -2,7 +2,7 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "fd";
-  version = "10.0.1";
+  version = "10.1.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
