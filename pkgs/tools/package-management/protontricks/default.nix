@@ -1,4 +1,5 @@
-{ lib
+{ config
+, lib
 , buildPythonApplication
 , fetchFromGitHub
 , setuptools-scm
@@ -44,7 +45,9 @@ buildPythonApplication rec {
     pillow
   ];
 
-  makeWrapperArgs = [
+  makeWrapperArgs = (lib.optionalAttrs (config.programs.steam.extraCompatPackages != [ ]) [
+    "--prefix STEAM_EXTRA_COMPAT_TOOLS_PATHS : ${lib.makeSearchPathOutput} steamcompattool ${config.programs.steam.extraCompatPackages}"
+  ]) ++ [
     "--prefix PATH : ${lib.makeBinPath [
       winetricks
       yad
