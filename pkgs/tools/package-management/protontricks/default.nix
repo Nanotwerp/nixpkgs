@@ -45,8 +45,8 @@ buildPythonApplication rec {
     pillow
   ];
 
-  makeWrapperArgs = (lib.optionalAttrs (config.programs.steam.extraCompatPackages != [ ]) [
-    "--prefix STEAM_EXTRA_COMPAT_TOOLS_PATHS : ${lib.makeSearchPathOutput} steamcompattool ${config.programs.steam.extraCompatPackages}"
+  makeWrapperArgs = (lib.optionalAttrs (config.options.programs.steam.extraCompatPackages != [ ]) [
+    "--prefix STEAM_EXTRA_COMPAT_TOOLS_PATHS : ${lib.makeSearchPathOutput} steamcompattool ${config.options.programs.steam.extraCompatPackages}"
   ]) ++ [
     "--prefix PATH : ${lib.makeBinPath [
       winetricks
