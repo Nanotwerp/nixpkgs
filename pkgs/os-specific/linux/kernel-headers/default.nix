@@ -1,5 +1,12 @@
-{ stdenvNoCC, lib, buildPackages, fetchurl, perl, elf-header
-, bison, flex, rsync
+{ stdenvNoCC
+, lib
+, buildPackages
+, fetchurl
+, perl
+, elf-header
+, bison
+, flex
+, rsync
 , writeTextFile
 }:
 
@@ -29,7 +36,7 @@ let
     destination = "/include/byteswap.h";
   };
 
-  makeLinuxHeaders = { src, version, patches ? [] }: stdenvNoCC.mkDerivation {
+  makeLinuxHeaders = { src, version, patches ? [ ] }: stdenvNoCC.mkDerivation {
     inherit src;
 
     pname = "linux-headers";
@@ -45,16 +52,20 @@ let
     depsBuildBuild = [ buildPackages.stdenv.cc ];
     # `elf-header` is null when libc provides `elf.h`.
     nativeBuildInputs = [
-      perl elf-header
+      perl
+      elf-header
     ] ++ lib.optionals stdenvNoCC.hostPlatform.isAndroid [
-      bison flex rsync
-    ] ++ lib.optionals (stdenvNoCC.buildPlatform.isDarwin &&
-                        stdenvNoCC.hostPlatform.isMips) [
+      bison
+      flex
+      rsync
+    ] ++ lib.optionals
+      (stdenvNoCC.buildPlatform.isDarwin &&
+        stdenvNoCC.hostPlatform.isMips) [
       darwin-endian-h
       darwin-byteswap-h
     ];
 
-    extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) ["ppc"];
+    extraIncludeDirs = lib.optionals (with stdenvNoCC.hostPlatform; isPower && is32bit && isBigEndian) [ "ppc" ];
 
     inherit patches;
 
@@ -108,15 +119,20 @@ let
       platforms = platforms.linux;
     };
   };
-in {
+in
+{
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "6.7"; in
+  linuxHeaders =
+    let
+      version = "6.9-pf0";
+      rev = "5190fc52bee361bc8891b6232864ccb399497680";
+    in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-7zEUSiV20IDYwxaY6D7J9mv5fGd/oqrw1bu58zRbEGk=";
+        url = "https://codeberg.org/nanotwerp/linux/archive/${rev}.tar.gz";
+        hash = "sha256-z+zY2ddT0Z4hGiDUFM1sMw4eIckuYZT5wD6EE5qye6c=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
