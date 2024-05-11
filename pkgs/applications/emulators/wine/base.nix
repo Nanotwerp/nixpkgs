@@ -6,6 +6,7 @@
   wineRelease,
   patches,
   moltenvk,
+  linuxHeaders,
   buildScript ? null, configureFlags ? [], mainProgram ? "wine"
 }:
 
@@ -65,7 +66,7 @@ stdenv.mkDerivation ((lib.optionalAttrs (buildScript != null) {
     ++ lib.optional stdenv.isDarwin setupHookDarwin);
 
   buildInputs = toBuildInputs pkgArches (with supportFlags; (pkgs:
-  [ pkgs.freetype pkgs.perl pkgs.libunwind ]
+  [ pkgs.freetype pkgs.perl pkgs.libunwind pkgs.linuxHeaders ]
   ++ lib.optional stdenv.isLinux         pkgs.libcap
   ++ lib.optional stdenv.isDarwin        pkgs.libinotify-kqueue
   ++ lib.optional cupsSupport            pkgs.cups
