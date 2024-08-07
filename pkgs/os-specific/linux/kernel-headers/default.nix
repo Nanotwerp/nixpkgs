@@ -111,12 +111,12 @@ let
 in {
   inherit makeLinuxHeaders;
 
-  linuxHeaders = let version = "6.9"; in
+  linuxHeaders = let version = "6.11-pf0"; rev = "08fee9112b4f918be6902a7712e02cc8e13d44ea"; in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
-        url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-JPoB+5icej4oRT8Rd5kWhxN2bhGcU4HawwEV8Y8mgUk=";
+        url = "https://codeberg.org/nanotwerp/linux/archive/${rev}.tar.gz";
+        hash = "sha256-YbI8fthMvu+X67fcnxTAtK9ChRy4JHtJmEpEFvhD9VM=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms
